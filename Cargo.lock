@@ -6148,6 +6148,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "google-dataportability-v1"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "bytes",
+ "google-cloud-gax",
+ "google-cloud-gax-internal",
+ "google-cloud-wkt",
+ "serde",
+ "serde_json",
+ "serde_with",
+ "tracing",
+]
+
+[[package]]
 name = "google-developers-knowledge-v1"
 version = "1.4.0"
 dependencies = [

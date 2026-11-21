@@ -1970,6 +1970,15 @@
       "Product": "Cloud Workstations API"
     }
   ],
+  "google-dataportability-v1": [
+    {
+      "PkgName": "google-dataportability-v1",
+      "Language": "Rust",
+      "DocsURL": "https://docs.rs/google-dataportability-v1/latest",
+      "APIShortname": "dataportability",
+      "Product": "Data Portability API"
+    }
+  ],
   "google-developers-knowledge-v1": [
     {
       "PkgName": "google-developers-knowledge-v1",

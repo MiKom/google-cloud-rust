@@ -1,0 +1,13 @@
+{
+    "api_id": "dataportability.googleapis.com",
+    "api_shortname": "dataportability",
+    "client_documentation": "https://docs.rs/google-dataportability-v1/latest",
+    "distribution_name": "google-dataportability-v1",
+    "language": "rust",
+    "library_type": "GAPIC_AUTO",
+    "name": "dataportability",
+    "name_pretty": "Data Portability",
+    "product_documentation": "https://developers.google.com/data-portability",
+    "release_level": "preview",
+    "repo": "googleapis/google-cloud-rust"
+}
