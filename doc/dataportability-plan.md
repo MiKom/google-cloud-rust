@@ -71,13 +71,32 @@ built entirely in personal forks with no upstreaming:
    `librarian.yaml` (unverified whether it checks), set `version:` in the Rust
    fork to the fork's commit.
 
+### Phase 1 status (2026-11-21): done
+
+- librarian checkout: `../librarian` (sibling of this repo), branch
+  `dataportability` from `40c5096357bb`, remote `upstream` =
+  googleapis/librarian. Only change: the `sdk.yaml` entry above.
+- Binary: `../bin/librarian-dp.exe`.
+- No template fixes were needed; the discovery document generated cleanly.
+- Windows gotchas:
+  - Global `core.autocrlf=true` checks out librarian's embedded templates with
+    CRLF, producing broken generated TOML. Fixed with
+    `git config core.autocrlf false` **in the librarian clone only**, then a
+    fresh checkout and rebuild.
+  - librarian needs `taplo` (`cargo install taplo-cli --version 0.10.0 --locked`).
+  - The first source download can fail with "Access is denied" on rename
+    (`protobuf` and `conformance` share a commit); just retry.
+  - `go test ./internal/serviceconfig/` has existing failures on Windows (path
+    separators), with or without this change.
+
 ## Phase 2: generate the crate (Rust fork, `dataportability` branch)
 
-1. From the Rust repo root:
+1. `librarian add` does **not** work for discovery-only APIs: it requires the
+   path to exist in googleapis (`api path not found in googleapis source`). DNS
+   was also added by hand. Write the `librarian.yaml` entry manually (below),
+   then from the Rust repo root:
    ```sh
-   <bin>/librarian-dp add google/dataportability/v1
-   <bin>/librarian-dp generate google-dataportability-v1
-   <bin>/librarian-dp tidy
+   ../bin/librarian-dp.exe generate google-dataportability-v1
    ```
 1. The `librarian.yaml` entry should match DNS without the LRO parts (no
    `keep: src/operation.rs`, `pollers`, or `google-cloud-lro`):
@@ -85,11 +104,17 @@ built entirely in personal forks with no upstreaming:
      - name: google-dataportability-v1
        version: 0.1.0
        copyright_year: "2026"
-       roots: [discovery, googleapis]
+       roots:
+         - discovery
+         - googleapis
        specification_format: discovery
-       rust:
-         generate_rpc_samples: "false"
    ```
+   Status (2026-11-21): generated, not yet committed. Result: clients
+   `AccessType`, `ArchiveJobs`, `Authorization`, `PortabilityArchive`; open enums
+   with `UnknownValue`; `reset` returns crate-local `model::Empty` (not
+   `wkt::Empty`). fmt, both clippy configs, and `cargo test` pass. RPC samples
+   were generated without problems, so `generate_rpc_samples: "false"` is not
+   needed.
 1. Expected changes: root `Cargo.toml` (workspace member plus a
    `default-features = false` workspace dependency), `Cargo.lock`,
    `librarian.yaml`, `src/generated/dataportability/v1/**`. Never edit generated
